@@ -6,7 +6,7 @@ from ffpyplayer.player import MediaPlayer
 import numpy as np
 import librosa
 
-b = np.around(np.linspace(0,60,90),decimals=2)
+
 # y_beats = librosa.clicks(times= b)
 # librosa.output.write_wav('metro.wav', y_beats, 22050)
 # read a block of samples at a time, say 0.05 seconds worth
@@ -121,26 +121,30 @@ class TapTester(object):
         return ret
 
 if __name__ == "__main__":
-	tt = TapTester()
-	c = 0
-	player = MediaPlayer('metro.wav')
-	for i in range(1000):
-		# if tt.listen() == 1:
-		# 	if ((time.time()-start)% (2/3)) < 0.3:
-		# 		c += 1
-		# 		print("on beat")
-		# 		if c>1:
-		# 			print("streak x"+str(c))
-		# 	else:
-		# 		print("off beat")
-		# 		c = 0
+    bpm = input("enter beats per min")
+    b = np.around(np.linspace(0,60,int(bpm)),decimals=2)
+    y_beats = librosa.clicks(times= b)
+    librosa.output.write_wav('metro.wav', y_beats, 22050)
+    tt = TapTester()
+    c = 0
+    player = MediaPlayer('metro.wav')
+    for i in range(1000):
+    	# if tt.listen() == 1:
+    	# 	if ((time.time()-start)% (2/3)) < 0.3:
+    	# 		c += 1
+    	# 		print("on beat")
+    	# 		if c>1:
+    	# 			print("streak x"+str(c))
+    	# 	else:
+    	# 		print("off beat")
+    	# 		c = 0
 
-		if tt.listen() == 1:
-			if c == 0:
-				start = time.time()
-			if b[c]-0.1 <= round(time.time()-start,2) <= b[c]+0.1:
-				print("on beat x", str(c))
-				c+=1
-			else:
-				c=0
+    	if tt.listen() == 1:
+    		if c == 0:
+    			start = time.time()
+    		if b[c]-0.1 <= round(time.time()-start,2) <= b[c]+0.1:
+    			print("on beat x", str(c))
+    			c+=1
+    		else:
+    			c=0
 
